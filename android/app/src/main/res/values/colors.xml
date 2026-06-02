@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Folio brand background (light) — used for the native launch screen so
+         cold/warm starts show the brand color instead of a black flash. -->
+    <color name="folioLaunchBackground">#FFF4F3F1</color>
+</resources>
