@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../core/widgets/folio_brand_lockup.dart';
 import '../../products/presentation/providers/products_provider.dart';
 import '../../products/presentation/screens/product_list_screen.dart';
 
@@ -79,8 +80,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     ref.watch(productsProvider);
 
     final width = MediaQuery.sizeOf(context).width;
-    final emblemSize = (width * 0.27).clamp(88.0, 132.0);
-    final titleSize = (width * 0.12).clamp(36.0, 60.0);
+    final logoSize = (width * 0.2).clamp(74.0, 112.0);
+    final titleSize = (width * 0.14).clamp(42.0, 66.0);
 
     final fade = CurvedAnimation(parent: _intro, curve: Curves.easeOut);
     final rise = Tween<Offset>(
@@ -101,27 +102,23 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _Emblem(size: emblemSize),
-                    const SizedBox(height: 30),
-                    Text(
-                      'FOLIO',
-                      style: AppTypography.eyebrow(
+                    FolioBrandLockup(
+                      logoSize: logoSize,
+                      fontSize: titleSize,
+                      gap: 0,
+                      textYOffset: 6,
+                      centered: true,
+                    ),
+                    const SizedBox(height: 24),
+                    Container(
+                      width: 58,
+                      height: 3,
+                      decoration: BoxDecoration(
                         color: colors.accent,
-                        fontSize: 13,
+                        borderRadius: BorderRadius.circular(999),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Folio',
-                      textAlign: TextAlign.center,
-                      style: AppTypography.newsreader(
-                        fontSize: titleSize,
-                        fontWeight: FontWeight.w600,
-                        color: colors.textPrimary,
-                        height: 1,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 20),
                     Text(
                       'An editorial catalogue.',
                       textAlign: TextAlign.center,
@@ -143,52 +140,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Rounded-square brand emblem: a serif "F" on an accent gradient.
-class _Emblem extends StatelessWidget {
-  const _Emblem({required this.size});
-
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final accent = colors.accent;
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color.lerp(accent, Colors.white, 0.12)!,
-            Color.lerp(accent, Colors.black, 0.22)!,
-          ],
-        ),
-        borderRadius: BorderRadius.circular(size * 0.3),
-        boxShadow: [
-          BoxShadow(
-            color: accent.withValues(alpha: 0.36),
-            blurRadius: 28,
-            offset: const Offset(0, 12),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          'F',
-          style: AppTypography.newsreader(
-            fontSize: size * 0.52,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-            height: 1,
           ),
         ),
       ),

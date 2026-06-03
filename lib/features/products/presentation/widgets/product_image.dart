@@ -60,7 +60,7 @@ class _CategoryFallback extends StatelessWidget {
               color: tint.withValues(alpha: 0.13),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(Icons.shopping_bag_outlined, size: 22, color: tint),
+            child: Icon(Icons.image_outlined, size: 22, color: tint),
           ),
           const SizedBox(height: 8),
           Padding(

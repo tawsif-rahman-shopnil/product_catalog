@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/widgets/primary_button.dart';
 import '../../../favorites/presentation/providers/favorites_provider.dart';
 import '../../../favorites/presentation/widgets/favorite_button.dart';
 import '../../data/models/product.dart';
@@ -15,7 +14,7 @@ import '../widgets/product_image.dart';
 import '../widgets/star_rating.dart';
 
 /// Detail page: hero image, floating controls, category + rating pills,
-/// serif title, 5-star row, description, and a sticky price + Add to Bag bar.
+/// serif title, 5-star row, price, and description.
 class ProductDetailScreen extends ConsumerWidget {
   const ProductDetailScreen({super.key, required this.product});
 
@@ -44,33 +43,36 @@ class ProductDetailScreen extends ConsumerWidget {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 640),
                 child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(20, topInset + 10, 20, 8),
-                  child: SizedBox(
-                    height: heroHeight,
-                    child: Hero(
-                      tag: 'product-image-${product.id}',
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          AppTheme.radiusHero,
-                        ),
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: colors.border),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(20, topInset + 10, 20, 8),
+                      child: SizedBox(
+                        height: heroHeight,
+                        child: Hero(
+                          tag: 'product-image-${product.id}',
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(
                               AppTheme.radiusHero,
                             ),
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: colors.border),
+                                borderRadius: BorderRadius.circular(
+                                  AppTheme.radiusHero,
+                                ),
+                              ),
+                              child: ProductImage(
+                                product: product,
+                                padding: 30,
+                              ),
+                            ),
                           ),
-                          child: ProductImage(product: product, padding: 30),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                _Content(product: product),
-              ],
+                    _Content(product: product),
+                  ],
                 ),
               ),
             ),
@@ -107,14 +109,6 @@ class ProductDetailScreen extends ConsumerWidget {
                 ),
               ],
             ),
-          ),
-
-          // Sticky bottom bar: price + Add to Bag.
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: _BottomBar(product: product),
           ),
         ],
       ),
@@ -177,7 +171,7 @@ class _Content extends StatelessWidget {
     final colors = context.colors;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(22, 8, 22, 140),
+      padding: const EdgeInsets.fromLTRB(22, 8, 22, 34),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -215,6 +209,8 @@ class _Content extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 16),
+          PriceText(value: product.price, size: 30),
           const SizedBox(height: 16),
           Divider(height: 1, color: colors.border),
           const SizedBox(height: 16),
@@ -355,70 +351,6 @@ class _GlassCircle extends StatelessWidget {
                   label: semanticLabel,
                   child: Icon(icon, size: iconSize, color: colors.textPrimary),
                 ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomBar extends StatelessWidget {
-  const _BottomBar({required this.product});
-  final Product product;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = context.colors;
-    final bottomInset = MediaQuery.of(context).padding.bottom;
-    return ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-        child: Container(
-          padding: EdgeInsets.fromLTRB(22, 14, 22, 14 + bottomInset),
-          decoration: BoxDecoration(
-            color: colors.glass,
-            border: Border(top: BorderSide(color: colors.border)),
-          ),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 640),
-              child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Price',
-                    style: AppTypography.manrope(
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w600,
-                      color: colors.textSecondary,
-                      letterSpacing: 0.2,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  PriceText(value: product.price, size: 26),
-                ],
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: PrimaryButton(
-                  label: 'Add to Bag',
-                  icon: Icons.shopping_bag_outlined,
-                  large: true,
-                  fullWidth: true,
-                  onPressed: () => _showToast(
-                    context,
-                    'Added to your bag',
-                    Icons.shopping_bag_outlined,
-                    Colors.white,
-                  ),
-                ),
-              ),
-            ],
               ),
             ),
           ),

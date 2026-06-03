@@ -11,8 +11,8 @@ class ProductsNotifier extends AsyncNotifier<List<Product>> {
     return ref.watch(productRepositoryProvider).getProducts();
   }
 
-  /// Re-fetches the catalogue. Used by the app-bar refresh button, the error
-  /// retry button, and pull-to-refresh.
+  /// Re-fetches the catalogue. Used by the error retry button and
+  /// pull-to-refresh.
   ///
   /// Keeps the previously loaded data visible while the fetch is in flight so
   /// pull-to-refresh shows the spinner over the existing grid rather than
